@@ -1,0 +1,254 @@
+[
+    {
+        "name": "non-local-fork-marker-transitive",
+        "description": "",
+        "root": {
+            "requires": [
+                "a==1.0.0",
+                "b==1.0.0"
+            ]
+        },
+        "packages": {
+            "a": {
+                "versions": {
+                    "1.0.0": {
+                        "requires": [
+                                "c<2.0.0 ; sys_platform == 'linux'"
+                        ]
+                    }
+                }
+            },
+            "b": {
+                "versions": {
+                    "1.0.0": {
+                        "requires": [
+                                "c>=2.0.0 ; sys_platform == 'darwin'"
+                        ]
+                    }
+                }
+            },
+            "c": {
+                "versions": {
+                    "1.0.0": {},
+                    "2.0.0": {}
+                }
+            }
+        },
+        "expected": {
+            "satisfiable": false
+        }
+    },
+    {
+        "name": "non-local-fork-marker-direct",
+        "description": "",
+        "root": {
+            "requires": [
+                "a==1.0.0 ; sys_platform == 'linux'",
+                "b==1.0.0 ; sys_platform == 'darwin'"
+            ]
+        },
+        "packages": {
+            "a": {
+                "versions": {
+                    "1.0.0": {
+                        "requires": [
+                                "c<2.0.0"
+                        ]
+                    }
+                }
+            },
+            "b": {
+                "versions": {
+                    "1.0.0": {
+                        "requires": [
+                                "c>=2.0.0"
+                        ]
+                    }
+                }
+            },
+            "c": {
+                "versions": {
+                    "1.0.0": {},
+                    "2.0.0": {}
+                }
+            }
+        },
+        "expected": {
+            "satisfiable": false
+        }
+    },
+    {
+        "name": "non-fork-marker-transitive",
+        "description": "",
+        "root": {
+            "requires": [
+                "a==1.0.0",
+                "b==1.0.0"
+            ]
+        },
+        "packages": {
+            "a": {
+                "versions": {
+                    "1.0.0": {
+                        "requires": [
+                                "c>=2.0.0 ; sys_platform == 'linux'"
+                        ]
+                    }
+                }
+            },
+            "b": {
+                "versions": {
+                    "1.0.0": {
+                        "requires": [
+                                "c>=2.0.0 ; sys_platform == 'darwin'"
+                        ]
+                    }
+                }
+            },
+            "c": {
+                "versions": {
+                    "1.0.0": {},
+                    "2.0.0": {}
+                }
+            }
+        },
+        "expected": {
+            "satisfiable": true
+        }
+    },
+    {
+        "name": "fork-marker-selection",
+        "description": "",
+        "root": {
+            "requires": [
+                "a",
+                "b>=2.8 ; sys_platform == 'linux'",
+                "b<2.8 ; sys_platform == 'darwin'",
+                "b<2.7 ; sys_platform == 'windows'"
+            ]
+        },
+        "packages": {
+            "a": {
+                "versions": {
+                    "1.3.1": {},
+                    "2.0.0": {
+                        "requires": [
+                            "b>=2.8"
+                        ]
+                    },
+                    "3.1.0": {
+                        "requires": [
+                            "b>=2.8"
+                        ]
+                    },
+                    "4.3.0": {
+                        "requires": [
+                            "b>=2.8"
+                        ]
+                    }
+                }
+            },
+            "b": {
+                "versions": {
+                    "2.6": {},
+                    "2.7": {},
+                    "2.8": {}
+                }
+            }
+        },
+        "expected": {
+            "satisfiable": true
+        }
+    },
+    {
+        "name": "fork-marker-track",
+        "description": "",
+        "root": {
+            "requires": [
+                "a",
+                "b>=2.8 ; sys_platform == 'linux'",
+                "b<2.8 ; sys_platform == 'darwin'"
+            ]
+        },
+        "packages": {
+            "a": {
+                "versions": {
+                    "1.3.1": {
+                        "requires": [
+                            "c ; implementation_name == 'iron'"
+                        ]
+                    },
+                    "2.0.0": {
+                        "requires": [
+                            "b>=2.8",
+                            "c ; implementation_name == 'cpython'"
+                        ]
+                    },
+                    "3.1.0": {
+                        "requires": [
+                            "b>=2.8",
+                            "c ; implementation_name == 'pypy'"
+                        ]
+                    },
+                    "4.3.0": {
+                        "requires": [
+                            "b>=2.8"
+                        ]
+                    }
+                }
+            },
+            "b": {
+                "versions": {
+                    "2.7": {},
+                    "2.8": {}
+                }
+            },
+            "c": {
+                "versions": {
+                    "1.10": {}
+                }
+            }
+        },
+        "expected": {
+            "satisfiable": true
+        }
+    },
+    {
+        "name": "non-fork-marker-accrue",
+        "description": "",
+        "root": {
+            "requires": [
+                "a==1.0.0 ; implementation_name == 'cpython'",
+                "b==1.0.0 ; implementation_name == 'pypy'"
+            ]
+        },
+        "packages": {
+            "a": {
+                "versions": {
+                    "1.0.0": {
+                        "requires": [
+                                "c==1.0.0 ; sys_platform == 'linux'"
+                        ]
+                    }
+                }
+            },
+            "b": {
+                "versions": {
+                    "1.0.0": {
+                        "requires": [
+                                "c==1.0.0 ; sys_platform == 'darwin'"
+                        ]
+                    }
+                }
+            },
+            "c": {
+                "versions": {
+                    "1.0.0": {}
+                }
+            }
+        },
+        "expected": {
+            "satisfiable": true
+        }
+    }
+]
